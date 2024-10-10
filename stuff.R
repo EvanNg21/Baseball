@@ -19,6 +19,7 @@ library(randomForest)
 library(purrr)
 library(MAP)
 library(cowplot)
+library(shiny)
 
 data <- read.csv("C:\\Users\\EvanNg21\\Desktop\\Baseball\\R\\TM24Szn.csv")
 
@@ -57,8 +58,30 @@ Pitches <- function(df,name,date){
     
 }
 
-StrikeZone()
-Pitches(data,"Blood, Jason", "2024-02-16")
+ui <- fluidPage(
+  titlePanel("Baseball Pitch Analysis"),
+  
+  sidebarLayout(
+    sidebarPanel(
+      selectInput("pitcher", "Select Pitcher:",
+                  choices = unique(sort(data$Pitcher))),
+      dateInput("date", "Select Date:")
+    ),
+    
+    mainPanel(
+      plotOutput("pitchPlot")
+    )
+  )
+)
 
+# Define server logic
+server <- function(input, output) {
+  output$pitchPlot <- renderPlot({
+    Pitches(data, input$pitcher, input$date)
+  })
+}
+
+# Run the application 
+shinyApp(ui = ui, server = server)
 
 
