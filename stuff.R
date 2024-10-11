@@ -61,18 +61,18 @@ Pitches <- function(df,name,date){
 ui <- fluidPage(
   titlePanel("Baseball Pitch Analysis"),
   
-  sidebarLayout(
-    sidebarPanel(
-      selectInput("pitcher", "Select Pitcher:",
-                  choices = unique(sort(data$Pitcher))),
-      dateInput("date", "Select Date:")
+  fluidPage(
+      column(6,selectInput("pitcher", "Select Pitcher:",
+                  choices = unique(data$Pitcher))),
+      column(6,dateInput("date", "Select Date:",
+                value = "2024-02-16"))
     ),
     
     mainPanel(
       plotOutput("pitchPlot")
     )
   )
-)
+
 
 # Define server logic
 server <- function(input, output) {
